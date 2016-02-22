@@ -1,44 +1,60 @@
 import React, { Component } from 'react';
 
-var ease = 0.25;
-var v = 0;
-var friction = 0.75;
-
-const spring = (target, x) => {
-  v += (target - x) * ease;
-  v *= friction;
-  return x + v;
-};
+const ease = 1.5;
+const friction = 0.95;
 
 export default class HelloWorld extends Component {
   constructor(props) {
     super(props);
+    this.velocity = 0;
     this.state = {
-      x: 150,
+      isMount: false,
+      isOpen: false,
+      x: -40,
     };
   }
 
   componentDidMount() {
+    console.log(this.refs.wrapper.clientWidth)
+    console.log(this.refs.wrapper.clientHeight)
+    this.setState({
+      isMount: true,
+    });
     this.tick();
   }
 
+  spring(destination, position) {
+    //if (this.state.isOpen) return destination;
+    this.velocity += (destination - position) * ease;
+    this.velocity *= friction;
+    //if (destination - position < 0.01) this.setState({ isOpen: true });
+    return position + this.velocity;
+  };
+
   tick() {
-    const x = spring(100, this.state.x);
+    const x = this.spring(10, this.state.x);
     this.setState({ x });
     requestAnimationFrame(this.tick.bind(this));
   }
 
+  renderBox() {
+    
+  }
+
   render() {
+    const { style } = this.props;
     return (
-      <svg width="800px" height="800px">
-		<path d={`M 100 100
-                    Q 150 ${ this.state.x } 200 100
-                    Q 200 150 200 200
-                    Q 150 200 100 200
-                    Q 100 150 100 100 `}
-              fill='#ccc
-        '/>
-      </svg>
+      <div ref='wrapper' style={ Object.assign({}, style, { position: 'fixed' }) }>
+        <svg width="120%" height="120%" style={{ position: 'absolute', top: '-10%', left: '-10%'}}>
+  	      <path d={`M 10 10
+                    Q 60 ${ this.state.x } 110 10
+                    Q 110 60 110 110
+                    Q 60 110 10 110
+                    Q 10 60 10 10 `}
+                fill='#ccc'
+          />
+        </svg>
+      </div>
     );
   }
 }
