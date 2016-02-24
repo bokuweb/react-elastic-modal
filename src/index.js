@@ -46,7 +46,7 @@ export default class ElasticModal extends Component {
                      Q 110 60 110 110
                      Q 60 110 10 110
                      Q 10 60 10 10 ` }
-            fill="#ccc"
+            fill="#ddd"
           />
         </svg>
       </div>
