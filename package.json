@@ -71,8 +71,5 @@
   },
   "files": [
     "lib"
-  ],
-  "dependencies": {
-    "react-motion": "^0.4.2"
-  }
+  ]
 }
