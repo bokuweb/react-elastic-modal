@@ -9,10 +9,10 @@ export default class ElasticModal extends Component {
   constructor(props) {
     super(props);
     // FIXME
-    this.topEasing = new Easing(0.9,0.7);
-    this.bottomEasing = new Easing(0.9,0.7);
-    this.rightEasing = new Easing(0.9,0.7);
-    this.leftEasing = new Easing(0.9,0.7);
+    this.topEasing = new Easing(1,0.75);
+    this.bottomEasing = new Easing(1,0.75);
+    this.rightEasing = new Easing(1,0.75);
+    this.leftEasing = new Easing(1,0.75);
 
     this.state = {
       isOpen: false,
@@ -54,7 +54,7 @@ export default class ElasticModal extends Component {
     const bottom = this.bottomEasing.get(this.state.height * 1.5, this.state.bottom);
     const right = this.rightEasing.get(this.state.width * 1.5, this.state.right);
     const left = this.leftEasing.get(this.state.width * 0.5, this.state.left);
-    this.setState({ top, bottom, right, left, scale: this.state.scale + 0.1 >= 1 ? 1 : this.state.scale + 0.1 });
+    this.setState({ top, bottom, right, left, scale: this.state.scale + 0.08 >= 1 ? 1 : this.state.scale + 0.08 });
     requestAnimationFrame(this.tick.bind(this));
   }
 
@@ -89,8 +89,10 @@ export default class ElasticModal extends Component {
         <div ref="wrapper" style={ Object.assign({}, style, { position: 'fixed', overflow: 'visible' }) }>
           { this.renderPath() }
         </div>
-        <div style={ Object.assign({}, { position: 'fixed',  color: '#fff' }, style) } >
-          { this.props.children }
+        <div style={ Object.assign({}, { position: 'fixed',  color: '#ccc' }, style) } >
+          <div style={{transform: `scale3d(${this.state.scale},${this.state.scale},1)`}}>
+            { this.props.children }
+            </div>
         </div>
       </div>
     );
