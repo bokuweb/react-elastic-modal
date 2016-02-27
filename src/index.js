@@ -9,14 +9,15 @@ export default class ElasticModal extends Component {
   constructor(props) {
     super(props);
     // FIXME
-    this.topEasing = new Easing(0.8, 0.7);
-    this.bottomEasing = new Easing(0.8, 0.7);
-    this.rightEasing = new Easing(0.8, 0.7);
-    this.leftEasing = new Easing(0.8, 0.7);
+    this.topEasing = new Easing(0.9,0.7);
+    this.bottomEasing = new Easing(0.9,0.7);
+    this.rightEasing = new Easing(0.9,0.7);
+    this.leftEasing = new Easing(0.9,0.7);
 
     this.state = {
       isOpen: false,
       isMount: false,
+      scale: 0,
     };
   }
 
@@ -53,7 +54,7 @@ export default class ElasticModal extends Component {
     const bottom = this.bottomEasing.get(this.state.height * 1.5, this.state.bottom);
     const right = this.rightEasing.get(this.state.width * 1.5, this.state.right);
     const left = this.leftEasing.get(this.state.width * 0.5, this.state.left);
-    this.setState({ top, bottom, right, left });
+    this.setState({ top, bottom, right, left, scale: this.state.scale + 0.1 >= 1 ? 1 : this.state.scale + 0.1 });
     requestAnimationFrame(this.tick.bind(this));
   }
 
@@ -67,8 +68,9 @@ export default class ElasticModal extends Component {
     const y1 = height + y0;
     const cy = height / 2 + y0;
     /* TODO: if is open change svg props to `width: 100%, height: 100%, top:0, left:0` */
+    console.log(this.state.scale)
     return (
-      <svg width="200%" height="200%" style={{ position: 'absolute', top: '-50%', left: '-50%' }}>
+      <svg width="200%" height="200%" style={{ position: 'absolute', top: '-50%', left: '-50%', transform: `scale3d(${this.state.scale},${this.state.scale},1)` }}>
         <path d={ `M ${x0} ${y0}
                    Q ${cx} ${ this.state.top } ${x1} ${y0}
                    Q ${ this.state.right } ${cy} ${x1} ${y1}
@@ -83,10 +85,13 @@ export default class ElasticModal extends Component {
   render() {
     const { style } = this.props;
     return (
-      <div ref="wrapper" style={ Object.assign({}, { position: 'fixed' }, style) }>
-        <div style={{ posistion: 'absolute', zIndex: 9999, backgroundColor: '#fff', width: '10px', height: '10px' }} />
-        <span style={{ posistion: 'absolute', zIndex: 9999, color: '#fff' }}>sample</span>
-        { this.renderPath() }
+      <div>
+        <div ref="wrapper" style={ Object.assign({}, style, { position: 'fixed', overflow: 'visible' }) }>
+          { this.renderPath() }
+        </div>
+        <div style={ Object.assign({}, { position: 'fixed',  color: '#fff' }, style) } >
+          { this.props.children }
+        </div>
       </div>
     );
   }
