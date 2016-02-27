@@ -15,19 +15,17 @@ export default class ElasticModal extends Component {
     this.state = {
       isOpen: false,
       isMount: false,
-      x: 200,
     };
   }
 
   componentDidMount() {
-    this.tick();
     const { wrapper } = this.refs;
     this.setState({
       isMount: true,
       height: wrapper.clientHeight,
       width: wrapper.clientWidth,
-      x: wrapper.clientHeight / 2,
-    });
+      x: wrapper.clientHeight,
+    }, this.tick);
   }
 
   componentWillReceiveProps(next) {
