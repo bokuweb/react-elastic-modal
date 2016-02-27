@@ -3,7 +3,7 @@ import HelloWorld from '../../src';
 
 const customStyles = {
   content : {
-    width: '200px',
+    width: '500px',
     height: '200px',
     top: '50%',
     left: '50%',
