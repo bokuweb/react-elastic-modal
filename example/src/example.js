@@ -7,7 +7,8 @@ const customStyles = {
     height: '200px',
     top: '50%',
     left: '50%',
-    transform: 'translate(-50%, -50%)',
+    //transform: 'translate(-50%, -50%)',
+    margin: '-100px 0 0 -250px'
   }
 };
 
