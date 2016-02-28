@@ -27,49 +27,64 @@ export default class ElasticModal extends Component {
       isMount: true,
       height,
       width,
-      top: height,
-      bottom: height,
-      right: width,
-      left: width,
+      top: height * 0.75,
+      bottom: height * 0.75,
+      right: width * 0.75,
+      left: width * 0.75,
     });
   }
 
   componentWillReceiveProps(next) {
+    this.topEasing = new Easing(1, 0.75);
+    this.bottomEasing = new Easing(1, 0.75);
+    this.rightEasing = new Easing(1, 0.75);
+    this.leftEasing = new Easing(1, 0.75);
     if (next.isOpen) {
       const width = this.refs.wrapper.clientWidth;
       const height = this.refs.wrapper.clientHeight;
       this.setState({
-        top: height,
-        bottom: height,
-        right: width,
-        left: width,
+        top: height * 0.75,
+        bottom: height * 0.75,
+        right: width * 0.75,
+        left: width * 0.75,
+        scale: 0,
       }, this.tick);
     } else {
-      this.tick();
+      const width = this.refs.wrapper.clientWidth;
+      const height = this.refs.wrapper.clientHeight;
+      this.setState({
+        top: height * 0.75,
+        bottom: height * 0.75,
+        right: width * 0.75,
+        left: width * 0.75,
+      }, this.tick);
     }
   }
 
   tick() {
     let scale;
     const { width, height } = this.state;
-    const top = this.topEasing.calc(height * 0.5, this.state.top);
-    const bottom = this.bottomEasing.calc(height * 1.5, this.state.bottom);
-    const right = this.rightEasing.calc(width * 1.5, this.state.right);
-    const left = this.leftEasing.calc(width * 0.5, this.state.left);
-    if (this.props.isOpen)
-      scale = this.state.scale + 0.08 >= 1 ? 1 : this.state.scale + 0.08;
-    else
-      scale = this.state.scale - 0.08 < 0 ? 0 : this.state.scale - 0.08;
-    if (this.topEasing.isStop()) return cancelAnimationFrame(this.animationId);
-    this.setState({ top, bottom, right, left, scale });
+    const top = this.topEasing.calc(height * 0.25, this.state.top);
+    const bottom = this.bottomEasing.calc(height * 1.25, this.state.bottom);
+    const right = this.rightEasing.calc(width * 1.25, this.state.right);
+    const left = this.leftEasing.calc(width * 0.25, this.state.left);
     this.animationId = requestAnimationFrame(::this.tick);
+    if (this.props.isOpen) {
+      scale = this.state.scale + 0.08 >= 1 ? 1 : this.state.scale + 0.08;
+      if (this.topEasing.isStop() && this.animationId ) return cancelAnimationFrame(this.animationId);
+      this.setState({ top, bottom, right, left, scale });
+    } else {
+      scale = this.state.scale - 0.08 < 0 ? 0 : this.state.scale - 0.08;
+      this.setState({ scale });
+      if (scale === 0) return cancelAnimationFrame(this.animationId);
+    }
   }
 
   renderPath() {
     if (!this.state.isMount) return null;
     const { width, height, top, right, bottom, left } = this.state;
-    const x0 = width * 0.5;
-    const y0 = height * 0.5;
+    const x0 = width * 0.25;
+    const y0 = height * 0.25;
     const cx = width / 2 + x0;
     const x1 = width + x0;
     const y1 = height + y0;
@@ -77,12 +92,12 @@ export default class ElasticModal extends Component {
     /* TODO: if is open change svg props to `width: 100%, height: 100%, top:0, left:0` */
     return (
       <svg
-        width="200%"
-        height="200%"
+        width="150%"
+        height="150%"
         style={{
           position: 'absolute',
-          top: '-50%',
-          left: '-50%',
+          top: '-25%',
+          left: '-25%',
           transform: `scale3d(${this.state.scale},${this.state.scale},1)`,
         }}
       >
@@ -99,14 +114,13 @@ export default class ElasticModal extends Component {
 
   render() {
     const { style, children } = this.props;
-    console.log(this.state.scale)
     return (
       <div>
         <div ref="wrapper" style={ Object.assign({ position: 'fixed' }, style, { overflow: 'visible' }) }>
           { this.renderPath() }
         </div>
         <div style={ Object.assign({}, { position: 'fixed' }, style) } >
-          <div style={{ transform: `scale3d(${this.state.scale}, ${this.state.scale}, 1)`, opacity: this.state.scale }}>
+          <div style={{ transform: `scale3d(${this.state.scale}, ${this.state.scale}, 1)`, opacity: this.props.isOpen ? this.state.scale : 0 }}>
             { children }
             </div>
         </div>
