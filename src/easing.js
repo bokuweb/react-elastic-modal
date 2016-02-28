@@ -5,9 +5,14 @@ export default class Easing {
     this.velocity = 0;
   }
 
-  get(destination, position) {
+  calc(destination, position) {
     this.velocity += (destination - position) * this.ease;
     this.velocity *= this.friction;
+    if (this.isStop()) return destination;
     return position + this.velocity;
+  }
+
+  isStop() {
+    return Math.abs(this.velocity) < 0.1;
   }
 }
