@@ -35,11 +35,9 @@ export default class ElasticModal extends Component {
   }
 
   componentWillReceiveProps(next) {
-    this.topEasing = new Easing(1, 0.75);
-    this.bottomEasing = new Easing(1, 0.75);
-    this.rightEasing = new Easing(1, 0.75);
-    this.leftEasing = new Easing(1, 0.75);
-    if (next.isOpen) {
+    // TODO: add animtaion stop condition
+    if (!this.props.isOpen && next.isOpen) {
+      cancelAnimationFrame(this.closeAnimationId)
       const width = this.refs.wrapper.clientWidth;
       const height = this.refs.wrapper.clientHeight;
       this.setState({
@@ -48,36 +46,37 @@ export default class ElasticModal extends Component {
         right: width * 0.75,
         left: width * 0.75,
         scale: 0,
-      }, this.tick);
-    } else {
+      }, this.open);
+    } else if (this.props.isOpen && !next.isOpen) {
       const width = this.refs.wrapper.clientWidth;
       const height = this.refs.wrapper.clientHeight;
+      cancelAnimationFrame(this.openAnimationId);
       this.setState({
         top: height * 0.75,
         bottom: height * 0.75,
         right: width * 0.75,
         left: width * 0.75,
-      }, this.tick);
+      }, this.close);
     }
   }
 
-  tick() {
-    let scale;
+  open() {
     const { width, height } = this.state;
     const top = this.topEasing.calc(height * 0.25, this.state.top);
     const bottom = this.bottomEasing.calc(height * 1.25, this.state.bottom);
     const right = this.rightEasing.calc(width * 1.25, this.state.right);
     const left = this.leftEasing.calc(width * 0.25, this.state.left);
-    this.animationId = requestAnimationFrame(::this.tick);
-    if (this.props.isOpen) {
-      scale = this.state.scale + 0.08 >= 1 ? 1 : this.state.scale + 0.08;
-      if (this.topEasing.isStop() && this.animationId ) return cancelAnimationFrame(this.animationId);
-      this.setState({ top, bottom, right, left, scale });
-    } else {
-      scale = this.state.scale - 0.08 < 0 ? 0 : this.state.scale - 0.08;
-      this.setState({ scale });
-      if (scale === 0) return cancelAnimationFrame(this.animationId);
-    }
+    this.openAnimationId = requestAnimationFrame(::this.open);
+    const scale = this.state.scale + 0.08 >= 1 ? 1 : this.state.scale + 0.08;
+    this.setState({ top, bottom, right, left, scale });
+    if (this.topEasing.isStop()) cancelAnimationFrame(this.openAnimationId);
+  }
+
+  close() {
+    this.closeAnimationId = requestAnimationFrame(::this.close);
+    const scale = this.state.scale - 0.08 < 0 ? 0 : this.state.scale - 0.08;
+    this.setState({ scale });
+    if (scale === 0) cancelAnimationFrame(this.closeAnimationId);
   }
 
   renderPath() {
