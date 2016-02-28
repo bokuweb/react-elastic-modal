@@ -3,19 +3,33 @@ import HelloWorld from '../../src';
 
 const customStyles = {
   content : {
-    width: '500px',
-    height: '200px',
+    width: '600px',
+    height: '400px',
     top: '50%',
     left: '50%',
-    //transform: 'translate(-50%, -50%)',
-    margin: '-100px 0 0 -250px'
+    //transform: 'translate(0,0)',
+    transform: 'translate(-50%, -50%)',
+    //margin: '-100px 0 0 -250px'
+    padding: '20px',
+    overflowY: 'scroll'
   }
 };
 
 export default class Example extends Component{
+  constructor(props) {
+    super(props);
+    this.state = {isOpen: false};
+  }
+
   render() {
     return (
-      <HelloWorld style={ customStyles.content }/>
+      <div>
+        <a onClick={() => this.setState({isOpen: true})}>modal open</a><br />
+        <a onClick={() => this.setState({isOpen: false})}>modal close</a>
+        <HelloWorld isOpen={this.state.isOpen} style={ customStyles.content }>
+          Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+        </HelloWorld>
+      </div>
     );
   }
 }
