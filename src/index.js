@@ -4,6 +4,12 @@ import Easing from './easing';
 export default class ElasticModal extends Component {
   static propTypes = {
     style: PropTypes.object,
+    isOpen: PropTypes.bool.isRequired,
+    children: PropTypes.any,
+  };
+
+  static defaultProps = {
+    isOpen: false,
   };
 
   constructor(props) {
@@ -12,19 +18,35 @@ export default class ElasticModal extends Component {
     this.bottomEasing = new Easing(1, 0.75);
     this.rightEasing = new Easing(1, 0.75);
     this.leftEasing = new Easing(1, 0.75);
-    this.animationId = null;
+    this.openAnimationId = null;
+    this.closeAnimationId = null;
     this.state = {
-      isOpen: false,
       isMount: false,
       scale: 0,
     };
   }
 
   componentDidMount() {
+    this.setMountState();
+    this.setDefaultState();
+  }
+
+  componentWillReceiveProps(next) {
+    if (!this.props.isOpen && next.isOpen) {
+      cancelAnimationFrame(this.closeAnimationId);
+      this.setDefaultState();
+      this.open();
+    } else if (this.props.isOpen && !next.isOpen) {
+      cancelAnimationFrame(this.openAnimationId);
+      this.setDefaultState();
+      this.close();
+    }
+  }
+
+  setDefaultState() {
     const width = this.refs.wrapper.clientWidth;
     const height = this.refs.wrapper.clientHeight;
     this.setState({
-      isMount: true,
       height,
       width,
       top: height * 0.75,
@@ -34,30 +56,8 @@ export default class ElasticModal extends Component {
     });
   }
 
-  componentWillReceiveProps(next) {
-    // TODO: add animtaion stop condition
-    if (!this.props.isOpen && next.isOpen) {
-      cancelAnimationFrame(this.closeAnimationId)
-      const width = this.refs.wrapper.clientWidth;
-      const height = this.refs.wrapper.clientHeight;
-      this.setState({
-        top: height * 0.75,
-        bottom: height * 0.75,
-        right: width * 0.75,
-        left: width * 0.75,
-        scale: 0,
-      }, this.open);
-    } else if (this.props.isOpen && !next.isOpen) {
-      const width = this.refs.wrapper.clientWidth;
-      const height = this.refs.wrapper.clientHeight;
-      cancelAnimationFrame(this.openAnimationId);
-      this.setState({
-        top: height * 0.75,
-        bottom: height * 0.75,
-        right: width * 0.75,
-        left: width * 0.75,
-      }, this.close);
-    }
+  setMountState() {
+    this.setState({ isMount: true });
   }
 
   open() {
@@ -115,11 +115,20 @@ export default class ElasticModal extends Component {
     const { style, children } = this.props;
     return (
       <div>
-        <div ref="wrapper" style={ Object.assign({ position: 'fixed' }, style, { overflow: 'visible' }) }>
+        <div
+          ref="wrapper"
+          style={ Object.assign({ position: 'fixed' }, style, { overflow: 'visible' }) }
+        >
           { this.renderPath() }
         </div>
         <div style={ Object.assign({}, { position: 'fixed' }, style) } >
-          <div style={{ transform: `scale3d(${this.state.scale}, ${this.state.scale}, 1)`, opacity: this.props.isOpen ? this.state.scale : 0 }}>
+          <div
+            style={{
+              transform: `scale3d(${this.state.scale},
+              ${this.state.scale}, 1)`,
+              opacity: this.props.isOpen ? this.state.scale : 0,
+            }}
+          >
             { children }
             </div>
         </div>
