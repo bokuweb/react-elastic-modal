@@ -11,7 +11,8 @@ const customStyles = {
     transform: 'translate(-50%, -50%)',
     //margin: '-100px 0 0 -250px'
     padding: '20px',
-    overflowY: 'scroll'
+    overflowY: 'scroll',
+    backgroundColor: '#ccc',
   }
 };
 

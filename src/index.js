@@ -113,7 +113,7 @@ export default class ElasticModal extends Component {
                    Q ${right} ${cy} ${x1} ${y1}
                    Q ${cx} ${bottom} ${x0} ${y1}
                    Q ${left} ${cy} ${x0} ${y0}` }
-          fill="#333"
+          fill={ this.props.style.backgroundColor }
         />
       </svg>
     );
@@ -125,19 +125,22 @@ export default class ElasticModal extends Component {
       <div>
         <div
           ref="wrapper"
-          style={ Object.assign({ position: 'fixed' }, style, { overflow: 'visible' }) }
+          style={ Object.assign({ position: 'fixed' }, style, {
+            overflow: 'visible',
+            backgroundColor: 'none',
+          }) }
         >
           { this.renderPath() }
         </div>
-        <div style={ Object.assign({}, { position: 'fixed' }, style) } >
-          <div
-            style={{
-              transform: `scale3d(${this.state.scale}, ${this.state.scale}, 1)`,
-              opacity: this.state.scale === 1 ? this.state.scale : 0,
-            }}
-          >
-            { children }
-            </div>
+        <div style={ Object.assign({
+          transform: `scale3d(${this.state.scale}, ${this.state.scale}, 1)`,
+        }, style, {
+          position: 'fixed',
+          opacity: this.state.scale === 1 ? this.state.scale : 0,
+          backgroundColor: 'none',
+        }) }
+        >
+          { children }
         </div>
       </div>
     );
