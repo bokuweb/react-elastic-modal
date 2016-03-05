@@ -1,5 +1,5 @@
 {
-  "name": "react-develop-boilerplate",
+  "name": "react-elastic-modal",
   "version": "0.1.0",
   "description": "",
   "main": "lib/index.js",
@@ -18,14 +18,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bokuweb/react-develop-boilerplate.git"
+    "url": "git+https://github.com/bokuweb/react-elastic-modal.git"
   },
   "author": "bokuweb",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/bokuweb/react-develop-boilerplate/issues"
+    "url": "https://github.com/bokuweb/react-elastic-modal/issues"
   },
-  "homepage": "https://github.com/bokuweb/react-develop-boilerplate#readme",
+  "homepage": "https://github.com/bokuweb/react-elastic-modal#readme",
   "devDependencies": {
     "babel": "^6.3.26",
     "babel-cli": "^6.4.5",
