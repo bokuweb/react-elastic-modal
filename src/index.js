@@ -41,6 +41,8 @@ export default class ElasticModal extends Component {
       scale: 0,
       opacity: 0,
     };
+    this.resize = ::this.resize;
+    window.addEventListener('resize', this.resize);
   }
 
   componentDidMount() {
@@ -77,11 +79,29 @@ export default class ElasticModal extends Component {
     this.setState({ isMount: true });
   }
 
+  resize() {
+    const { isOpen } = this.props;
+    const width = this.refs.wrapper.clientWidth;
+    const height = this.refs.wrapper.clientHeight;
+    this.setState({
+      height,
+      width,
+      top: isOpen ? height * 0.05 : height * 0.55,
+      bottom: isOpen ? height * 1.05 : height * 0.55,
+      right: isOpen ? width * 1.05 : width * 0.55,
+      left: isOpen ? width * 0.05 : width * 0.55,
+    });
+  }
+
+  conponentWillUnmount() {
+    window.removeEventListener('resize', this.resize);
+  }
+
   isAnimationStop() {
     return (
-      this.topEasing.isStop() ||
-      this.rightEasing.isStop() ||
-      this.bottomEasing.isStop() ||
+      this.topEasing.isStop() &&
+      this.rightEasing.isStop() &&
+      this.bottomEasing.isStop() &&
       this.leftEasing.isStop()
     );
   }
