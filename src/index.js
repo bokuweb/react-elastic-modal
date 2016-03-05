@@ -10,6 +10,7 @@ export default class ElasticModal extends Component {
       backgroundColor: React.PropTypes.string.isRequired,
       width: React.PropTypes.string.isRequired,
       height: React.PropTypes.string.isRequired,
+      opacity: React.PropTypes.number,
     }),
     overlay: PropTypes.shape({
       background: React.PropTypes.string,
@@ -19,6 +20,9 @@ export default class ElasticModal extends Component {
   static defaultProps = {
     isOpen: false,
     onRequestClose: () => null,
+    modal: {
+      opacity: 1,
+    },
     overlay: {
       background: 'rgba(0, 0, 0, 0.8)',
     },
@@ -121,6 +125,7 @@ export default class ElasticModal extends Component {
           top: '-5%',
           left: '-5%',
           transform: `scale3d(${this.state.scale}, ${this.state.scale}, 1)`,
+          opacity: this.props.modal.opacity,
         }}
       >
         <path d={ `M ${x0} ${y0}
@@ -135,8 +140,8 @@ export default class ElasticModal extends Component {
   }
 
   render() {
-    const { children, isOpen, onRequestClose, modal: { width, height } } = this.props;
-    const { scale, opacity } = this.state;
+    const { children, isOpen, onRequestClose, modal } = this.props;
+    const { scale, opacity, width, height } = this.state;
     return (
       <div>
         <div
@@ -157,8 +162,12 @@ export default class ElasticModal extends Component {
           style={{
             position: 'fixed',
             overflow: 'visible',
-            width,
-            height,
+            top: '50%',
+            left: '50%',
+            marginTop: `-${height / 2}px`,
+            marginLeft: `-${width / 2}px`,
+            width: modal.width,
+            height: modal.height,
           }}
         >
           { this.renderPath() }
@@ -167,10 +176,14 @@ export default class ElasticModal extends Component {
           style={{
             transform: `scale3d(${scale}, ${scale}, 1)`,
             position: 'fixed',
+            top: '50%',
+            left: '50%',
+            marginTop: `-${height / 2}px`,
+            marginLeft: `-${width / 2}px`,
             opacity,
             visibility: isOpen ? 'visible' : 'hidden',
-            width,
-            height,
+            width: modal.width,
+            height: modal.height,
           }}
         >
           { children }
