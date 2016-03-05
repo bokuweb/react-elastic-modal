@@ -15,11 +15,7 @@ export default class ElasticModal extends Component {
     modal: PropTypes.shape({
       backgroundColor: React.PropTypes.string.isRequired,
       width: React.PropTypes.string.isRequired,
-      minWidth: React.PropTypes.string,
-      maxWidth: React.PropTypes.string,
       height: React.PropTypes.string.isRequired,
-      minHeight: React.PropTypes.string,
-      maxHeight: React.PropTypes.string,
       opacity: React.PropTypes.number,
       zIndex: React.PropTypes.number,
     }),
@@ -188,11 +184,7 @@ export default class ElasticModal extends Component {
       marginTop: `-${height / 2}px`,
       marginLeft: `-${width / 2}px`,
       width: modal.width,
-      minWidth: modal.minWidth,
-      maxWidth: modal.maxWidth,
       height: modal.height,
-      minHeight: modal.minHeight,
-      maxHeight: modal.maxHeight,
       zIndex: modal.zIndex,
     };
     return (
