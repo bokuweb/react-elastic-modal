@@ -93,6 +93,12 @@ overlay: PropTypes.shape({
 - background: Specify overlay background. Default value is `rgba(0, 0, 0, 0.8)`. 
 - zIndex: Specify overlay zIndex. Default value is `100`.
 
+## ChangeLog
+
+### v0.1.0
+
+- Published
+
 ## License
 
 The MIT License (MIT)
