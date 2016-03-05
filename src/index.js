@@ -34,11 +34,11 @@ export default class ElasticModal extends Component {
     onRequestClose: () => null,
     modal: {
       opacity: 1,
-      zIndex: 100,
+      zIndex: 101,
     },
     overlay: {
       background: 'rgba(0, 0, 0, 0.8)',
-      zIndex: 101,
+      zIndex: 100,
     },
   };
 
