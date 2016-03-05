@@ -21,9 +21,11 @@ export default class ElasticModal extends Component {
       minHeight: React.PropTypes.string,
       maxHeight: React.PropTypes.string,
       opacity: React.PropTypes.number,
+      zIndex: React.PropTypes.number,
     }),
     overlay: PropTypes.shape({
       background: React.PropTypes.string,
+      zIndex: React.PropTypes.number,
     }),
   };
 
@@ -32,9 +34,11 @@ export default class ElasticModal extends Component {
     onRequestClose: () => null,
     modal: {
       opacity: 1,
+      zIndex: 100,
     },
     overlay: {
       background: 'rgba(0, 0, 0, 0.8)',
+      zIndex: 101,
     },
   };
 
@@ -174,7 +178,7 @@ export default class ElasticModal extends Component {
   }
 
   render() {
-    const { children, isOpen, onRequestClose, modal } = this.props;
+    const { children, isOpen, onRequestClose, modal, overlay } = this.props;
     const { scale, opacity, width, height } = this.state;
     const commonStyles = {
       transform: `scale3d(${scale}, ${scale}, 1)`,
@@ -189,6 +193,7 @@ export default class ElasticModal extends Component {
       height: modal.height,
       minHeight: modal.minHeight,
       maxHeight: modal.maxHeight,
+      zIndex: modal.zIndex,
     };
     return (
       <div>
@@ -200,9 +205,10 @@ export default class ElasticModal extends Component {
             height: '100%',
             top: 0,
             left: 0,
-            background: this.props.overlay.background,
+            background: overlay.background,
             visibility: isOpen ? 'visible' : 'hidden',
             opacity,
+            zIndex: overlay.zIndex,
           }}
         />
         <div ref="wrapper" style={{ overflow: 'visible', ...commonStyles }} >
@@ -214,6 +220,7 @@ export default class ElasticModal extends Component {
             overflow: 'scroll',
             ...commonStyles,
             visibility: isOpen ? 'visible' : 'hidden',
+            zIndex: modal.zIndex,
           }}
         >
           { children }
