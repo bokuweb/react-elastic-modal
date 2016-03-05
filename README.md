@@ -6,6 +6,14 @@ React elastic modal component
 [![Code Climate](https://codeclimate.com/github/bokuweb/react-elastic-modal/badges/gpa.svg)](https://codeclimate.com/github/bokuweb/react-elastic-modal)
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
 
+## Screenshot
+
+![screenshot](https://github.com/bokuweb/react-elastic-modal/blob/master/screenshot.gif?raw=true)
+
+## DEMO
+
+http://bokuweb.github.io/react-elastic-modal/
+
 ## License
 
 The MIT License (MIT)
