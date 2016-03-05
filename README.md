@@ -1,5 +1,10 @@
-# README
+# react-elastic-modal
 
+React elastic modal component
+
+[![Build Status](https://travis-ci.org/bokuweb/react-elastic-modal.svg?branch=master)](https://travis-ci.org/bokuweb/react-elastic-modal)
+[![Code Climate](https://codeclimate.com/github/bokuweb/react-elastic-modal/badges/gpa.svg)](https://codeclimate.com/github/bokuweb/react-elastic-modal)
+[![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
 
 ## License
 
