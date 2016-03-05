@@ -3,13 +3,19 @@ import Easing from './easing';
 
 export default class ElasticModal extends Component {
   static propTypes = {
-    style: PropTypes.object,
     isOpen: PropTypes.bool.isRequired,
     children: PropTypes.any,
+    onRequestClose: PropTypes.func,
+    modal: PropTypes.shape({
+      backgroundColor: React.PropTypes.string.isRequired,
+      width: React.PropTypes.string.isRequired,
+      height: React.PropTypes.string.isRequired,
+    }),
   };
 
   static defaultProps = {
     isOpen: false,
+    onRequestClose: () => null,
   };
 
   constructor(props) {
@@ -23,6 +29,7 @@ export default class ElasticModal extends Component {
     this.state = {
       isMount: false,
       scale: 0,
+      opacity: 0,
     };
   }
 
@@ -77,7 +84,8 @@ export default class ElasticModal extends Component {
     const left = this.leftEasing.calc(width * 0.05, this.state.left);
     this.openAnimationId = requestAnimationFrame(::this.open);
     const scale = this.state.scale + 0.08 >= 1 ? 1 : this.state.scale + 0.08;
-    this.setState({ top, bottom, right, left, scale });
+    const opacity = this.state.opacity + 0.08 >= 1 ? 1 : this.state.opacity + 0.08;
+    this.setState({ top, bottom, right, left, scale, opacity });
     if (this.isAnimationStop()) cancelAnimationFrame(this.openAnimationId);
   }
 
@@ -113,32 +121,50 @@ export default class ElasticModal extends Component {
                    Q ${right} ${cy} ${x1} ${y1}
                    Q ${cx} ${bottom} ${x0} ${y1}
                    Q ${left} ${cy} ${x0} ${y0}` }
-          fill={ this.props.style.backgroundColor }
+          fill={ this.props.modal.backgroundColor }
         />
       </svg>
     );
   }
 
   render() {
-    const { style, children } = this.props;
+    const { children, isOpen, onRequestClose, modal: { width, height } } = this.props;
+    const { scale, opacity } = this.state;
     return (
       <div>
         <div
+          onClick={ onRequestClose }
+          style={{
+            position: 'fixed',
+            width: '100%',
+            height: '100%',
+            top: 0,
+            left: 0,
+            background: 'rgba(0, 0, 0, 0.8)',
+            visibility: isOpen ? 'visible' : 'hidden',
+            opacity,
+          }}
+        />
+        <div
           ref="wrapper"
-          style={ Object.assign({ position: 'fixed' }, style, {
+          style={{
+            position: 'fixed',
             overflow: 'visible',
-            backgroundColor: 'none',
-          }) }
+            width,
+            height,
+          }}
         >
           { this.renderPath() }
         </div>
-        <div style={ Object.assign({
-          transform: `scale3d(${this.state.scale}, ${this.state.scale}, 1)`,
-        }, style, {
-          position: 'fixed',
-          opacity: this.state.scale === 1 ? this.state.scale : 0,
-          backgroundColor: 'none',
-        }) }
+        <div
+          style={{
+            transform: `scale3d(${scale}, ${scale}, 1)`,
+            position: 'fixed',
+            opacity,
+            visibility: isOpen ? 'visible' : 'hidden',
+            width,
+            height,
+          }}
         >
           { children }
         </div>
