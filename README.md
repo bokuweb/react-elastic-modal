@@ -43,6 +43,56 @@ http://bokuweb.github.io/react-elastic-modal/
 </Modal>
 ```
 
+## Props
+
+### `isOepn`: PropTypes.bool.isRequired
+
+If true, the modal is open. If false, the modal is closed.
+
+### `onRequestClose`: PropTypes.func
+
+This callback is called when overlay element clicked.
+If you want to close modal when overlay clicked, please set `isOpen` state `false` in this callback. 
+
+### `modal`: PropTypes.shape
+
+This props specify modal styles.
+
+``` javascript
+modal: PropTypes.shape({
+  backgroundColor: React.PropTypes.string.isRequired,
+  width: React.PropTypes.string.isRequired,
+  height: React.PropTypes.string.isRequired,
+  opacity: React.PropTypes.number,
+  zIndex: React.PropTypes.number,
+})
+```
+
+- backgroundColor: Specify modal background color.
+- width: Specify modal width. i.e. `width: '100px'` or `width: '50%'`.
+- height: Specify modal width. i.e. `height: '100px'` or `height: '50%'`.
+- opacity: Specify modal opacity. Default value is `1`.
+- zIndex: Specify modal zIndex. Default value is `101`.
+    
+#### Attention
+
+react-elastic-modal rendered by svg.
+if you set modal size `{width: 100px, height: 200px}`, svg width and height is set `{width: 110px, height: 220px}`.
+    
+### `overlay`: PropTypes.shape
+
+This props specify overlay styles.
+
+``` javascript
+overlay: PropTypes.shape({
+  background: React.PropTypes.string,
+  zIndex: React.PropTypes.number,
+})
+```
+
+- background: Specify overlay background. Default value is `rgba(0, 0, 0, 0.8)`. 
+- zIndex: Specify overlay zIndex. Default value is `100`.
+
 ## License
 
 The MIT License (MIT)
