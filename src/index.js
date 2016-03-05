@@ -15,11 +15,7 @@ export default class ElasticModal extends Component {
     modal: PropTypes.shape({
       backgroundColor: React.PropTypes.string.isRequired,
       width: React.PropTypes.string.isRequired,
-      minWidth: React.PropTypes.string,
-      maxWidth: React.PropTypes.string,
       height: React.PropTypes.string.isRequired,
-      minHeight: React.PropTypes.string,
-      maxHeight: React.PropTypes.string,
       opacity: React.PropTypes.number,
       zIndex: React.PropTypes.number,
     }),
@@ -30,15 +26,10 @@ export default class ElasticModal extends Component {
   };
 
   static defaultProps = {
-    isOpen: false,
     onRequestClose: () => null,
-    modal: {
-      opacity: 1,
-      zIndex: 100,
-    },
     overlay: {
       background: 'rgba(0, 0, 0, 0.8)',
-      zIndex: 101,
+      zIndex: 100,
     },
   };
 
@@ -77,7 +68,7 @@ export default class ElasticModal extends Component {
   }
 
   setDefaultState() {
-    const width = this.refs.wrapper.clientWidth;
+    const width = this.refs.wrapper.scrollWidth;
     const height = this.refs.wrapper.clientHeight;
     this.setState({
       height,
@@ -163,7 +154,7 @@ export default class ElasticModal extends Component {
           top: '-5%',
           left: '-5%',
           transform: `scale3d(${this.state.scale}, ${this.state.scale}, 1)`,
-          opacity: this.props.modal.opacity,
+          opacity: this.props.modal.opacity || 1,
         }}
       >
         <path d={ `M ${x0} ${y0}
@@ -188,13 +179,10 @@ export default class ElasticModal extends Component {
       marginTop: `-${height / 2}px`,
       marginLeft: `-${width / 2}px`,
       width: modal.width,
-      minWidth: modal.minWidth,
-      maxWidth: modal.maxWidth,
       height: modal.height,
-      minHeight: modal.minHeight,
-      maxHeight: modal.maxHeight,
-      zIndex: modal.zIndex,
+      zIndex: modal.zIndex || 101,
     };
+
     return (
       <div>
         <div
@@ -208,7 +196,7 @@ export default class ElasticModal extends Component {
             background: overlay.background,
             visibility: isOpen ? 'visible' : 'hidden',
             opacity,
-            zIndex: overlay.zIndex,
+            zIndex: overlay.zIndex || 100,
           }}
         />
         <div ref="wrapper" style={{ overflow: 'visible', ...commonStyles }} >
@@ -220,7 +208,6 @@ export default class ElasticModal extends Component {
             overflow: 'scroll',
             ...commonStyles,
             visibility: isOpen ? 'visible' : 'hidden',
-            zIndex: modal.zIndex,
           }}
         >
           { children }

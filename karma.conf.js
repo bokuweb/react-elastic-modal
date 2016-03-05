@@ -44,8 +44,18 @@ module.exports = function(config) {
 
     autoWatch: false,
 
-    browsers: ['PhantomJS'],
-
+    browsers: ['Large_PhantomJS'],
+    customLaunchers: {
+      'Large_PhantomJS': {
+        base: 'PhantomJS',
+        options: {
+          viewportSize: {
+            width: 1280,
+            height: 1000,
+          }
+        }
+      }
+    },
     singleRun: true
   })
 }
