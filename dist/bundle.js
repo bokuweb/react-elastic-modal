@@ -59,7 +59,7 @@ var Example = function (_Component) {
             },
             modal: {
               width: '50%',
-              height: '420px',
+              height: '360px',
               backgroundColor: '#fff',
               opacity: 0.5
             },
@@ -73,7 +73,7 @@ var Example = function (_Component) {
             _react2.default.createElement(
               'p',
               null,
-              'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.'
+              'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
             ),
             _react2.default.createElement(
               'div',
@@ -19268,7 +19268,7 @@ var ElasticModal = function (_Component) {
   }, {
     key: 'setDefaultState',
     value: function setDefaultState() {
-      var width = this.refs.wrapper.clientWidth;
+      var width = this.refs.wrapper.scrollWidth;
       var height = this.refs.wrapper.clientHeight;
       this.setState({
         height: height,
@@ -19364,7 +19364,7 @@ var ElasticModal = function (_Component) {
             top: '-5%',
             left: '-5%',
             transform: 'scale3d(' + this.state.scale + ', ' + this.state.scale + ', 1)',
-            opacity: this.props.modal.opacity
+            opacity: this.props.modal.opacity || 1
           }
         },
         _react2.default.createElement('path', { d: 'M ' + x0 + ' ' + y0 + '\n                   Q ' + cx + ' ' + top + ' ' + x1 + ' ' + y0 + '\n                   Q ' + right + ' ' + cy + ' ' + x1 + ' ' + y1 + '\n                   Q ' + cx + ' ' + bottom + ' ' + x0 + ' ' + y1 + '\n                   Q ' + left + ' ' + cy + ' ' + x0 + ' ' + y0,
@@ -19395,13 +19395,10 @@ var ElasticModal = function (_Component) {
         marginTop: '-' + height / 2 + 'px',
         marginLeft: '-' + width / 2 + 'px',
         width: modal.width,
-        minWidth: modal.minWidth,
-        maxWidth: modal.maxWidth,
         height: modal.height,
-        minHeight: modal.minHeight,
-        maxHeight: modal.maxHeight,
-        zIndex: modal.zIndex
+        zIndex: modal.zIndex || 101
       };
+
       return _react2.default.createElement(
         'div',
         null,
@@ -19416,7 +19413,7 @@ var ElasticModal = function (_Component) {
             background: overlay.background,
             visibility: isOpen ? 'visible' : 'hidden',
             opacity: opacity,
-            zIndex: overlay.zIndex
+            zIndex: overlay.zIndex || 100
           }
         }),
         _react2.default.createElement(
@@ -19431,8 +19428,7 @@ var ElasticModal = function (_Component) {
               opacity: opacity,
               overflow: 'scroll'
             }, commonStyles, {
-              visibility: isOpen ? 'visible' : 'hidden',
-              zIndex: modal.zIndex
+              visibility: isOpen ? 'visible' : 'hidden'
             })
           },
           children
@@ -19451,11 +19447,7 @@ ElasticModal.propTypes = {
   modal: _react.PropTypes.shape({
     backgroundColor: _react2.default.PropTypes.string.isRequired,
     width: _react2.default.PropTypes.string.isRequired,
-    minWidth: _react2.default.PropTypes.string,
-    maxWidth: _react2.default.PropTypes.string,
     height: _react2.default.PropTypes.string.isRequired,
-    minHeight: _react2.default.PropTypes.string,
-    maxHeight: _react2.default.PropTypes.string,
     opacity: _react2.default.PropTypes.number,
     zIndex: _react2.default.PropTypes.number
   }),
@@ -19465,17 +19457,12 @@ ElasticModal.propTypes = {
   })
 };
 ElasticModal.defaultProps = {
-  isOpen: false,
   onRequestClose: function onRequestClose() {
     return null;
   },
-  modal: {
-    opacity: 1,
-    zIndex: 100
-  },
   overlay: {
     background: 'rgba(0, 0, 0, 0.8)',
-    zIndex: 101
+    zIndex: 100
   }
 };
 exports.default = ElasticModal;
