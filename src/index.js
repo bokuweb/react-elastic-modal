@@ -11,11 +11,17 @@ export default class ElasticModal extends Component {
       width: React.PropTypes.string.isRequired,
       height: React.PropTypes.string.isRequired,
     }),
+    overlay: PropTypes.shape({
+      background: React.PropTypes.string,
+    }),
   };
 
   static defaultProps = {
     isOpen: false,
     onRequestClose: () => null,
+    overlay: {
+      background: 'rgba(0, 0, 0, 0.8)',
+    },
   };
 
   constructor(props) {
@@ -92,7 +98,8 @@ export default class ElasticModal extends Component {
   close() {
     this.closeAnimationId = requestAnimationFrame(::this.close);
     const scale = this.state.scale - 0.08 < 0 ? 0 : this.state.scale - 0.08;
-    this.setState({ scale });
+    const opacity = this.state.scale - 0.08 < 0 ? 0 : this.state.scale - 0.08;
+    this.setState({ scale, opacity });
     if (scale === 0) cancelAnimationFrame(this.closeAnimationId);
   }
 
