@@ -152,7 +152,7 @@ export default class ElasticModal extends Component {
             height: '100%',
             top: 0,
             left: 0,
-            background: 'rgba(0, 0, 0, 0.8)',
+            background: this.props.overlay.background,
             visibility: isOpen ? 'visible' : 'hidden',
             opacity,
           }}
@@ -160,6 +160,7 @@ export default class ElasticModal extends Component {
         <div
           ref="wrapper"
           style={{
+            transform: `scale3d(${scale}, ${scale}, 1)`,
             position: 'fixed',
             overflow: 'visible',
             top: '50%',
@@ -184,6 +185,7 @@ export default class ElasticModal extends Component {
             visibility: isOpen ? 'visible' : 'hidden',
             width: modal.width,
             height: modal.height,
+            overflow: 'scroll',
           }}
         >
           { children }
