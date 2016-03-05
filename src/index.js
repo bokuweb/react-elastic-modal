@@ -10,6 +10,7 @@ export default class ElasticModal extends Component {
       backgroundColor: React.PropTypes.string.isRequired,
       width: React.PropTypes.string.isRequired,
       height: React.PropTypes.string.isRequired,
+      opacity: React.PropTypes.number,
     }),
     overlay: PropTypes.shape({
       background: React.PropTypes.string,
@@ -19,6 +20,9 @@ export default class ElasticModal extends Component {
   static defaultProps = {
     isOpen: false,
     onRequestClose: () => null,
+    modal: {
+      opacity: 1,
+    },
     overlay: {
       background: 'rgba(0, 0, 0, 0.8)',
     },
@@ -37,6 +41,8 @@ export default class ElasticModal extends Component {
       scale: 0,
       opacity: 0,
     };
+    this.resize = ::this.resize;
+    window.addEventListener('resize', this.resize);
   }
 
   componentDidMount() {
@@ -73,11 +79,29 @@ export default class ElasticModal extends Component {
     this.setState({ isMount: true });
   }
 
+  resize() {
+    const { isOpen } = this.props;
+    const width = this.refs.wrapper.clientWidth;
+    const height = this.refs.wrapper.clientHeight;
+    this.setState({
+      height,
+      width,
+      top: isOpen ? height * 0.05 : height * 0.55,
+      bottom: isOpen ? height * 1.05 : height * 0.55,
+      right: isOpen ? width * 1.05 : width * 0.55,
+      left: isOpen ? width * 0.05 : width * 0.55,
+    });
+  }
+
+  conponentWillUnmount() {
+    window.removeEventListener('resize', this.resize);
+  }
+
   isAnimationStop() {
     return (
-      this.topEasing.isStop() ||
-      this.rightEasing.isStop() ||
-      this.bottomEasing.isStop() ||
+      this.topEasing.isStop() &&
+      this.rightEasing.isStop() &&
+      this.bottomEasing.isStop() &&
       this.leftEasing.isStop()
     );
   }
@@ -121,6 +145,7 @@ export default class ElasticModal extends Component {
           top: '-5%',
           left: '-5%',
           transform: `scale3d(${this.state.scale}, ${this.state.scale}, 1)`,
+          opacity: this.props.modal.opacity,
         }}
       >
         <path d={ `M ${x0} ${y0}
@@ -135,8 +160,8 @@ export default class ElasticModal extends Component {
   }
 
   render() {
-    const { children, isOpen, onRequestClose, modal: { width, height } } = this.props;
-    const { scale, opacity } = this.state;
+    const { children, isOpen, onRequestClose, modal } = this.props;
+    const { scale, opacity, width, height } = this.state;
     return (
       <div>
         <div
@@ -147,7 +172,7 @@ export default class ElasticModal extends Component {
             height: '100%',
             top: 0,
             left: 0,
-            background: 'rgba(0, 0, 0, 0.8)',
+            background: this.props.overlay.background,
             visibility: isOpen ? 'visible' : 'hidden',
             opacity,
           }}
@@ -155,10 +180,15 @@ export default class ElasticModal extends Component {
         <div
           ref="wrapper"
           style={{
+            transform: `scale3d(${scale}, ${scale}, 1)`,
             position: 'fixed',
             overflow: 'visible',
-            width,
-            height,
+            top: '50%',
+            left: '50%',
+            marginTop: `-${height / 2}px`,
+            marginLeft: `-${width / 2}px`,
+            width: modal.width,
+            height: modal.height,
           }}
         >
           { this.renderPath() }
@@ -167,10 +197,15 @@ export default class ElasticModal extends Component {
           style={{
             transform: `scale3d(${scale}, ${scale}, 1)`,
             position: 'fixed',
+            top: '50%',
+            left: '50%',
+            marginTop: `-${height / 2}px`,
+            marginLeft: `-${width / 2}px`,
             opacity,
             visibility: isOpen ? 'visible' : 'hidden',
-            width,
-            height,
+            width: modal.width,
+            height: modal.height,
+            overflow: 'scroll',
           }}
         >
           { children }
