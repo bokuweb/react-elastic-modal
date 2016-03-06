@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow, mount, render } from 'enzyme';
 import assert from 'power-assert';
+import sinon from 'sinon';
 import Modal from '../src/index';
 
 describe('Modal test', () => {
@@ -26,7 +27,7 @@ describe('Modal test', () => {
     assert(div.at(2).children().at(0).contains('test'));
   });
 
-  it('should first div rendered with expected styles when pass requred props', () => {
+  it('should first div rendered with expected props when pass requred props', () => {
     const wrapper = shallow(
       <Modal
         isOpen={false}
@@ -52,9 +53,108 @@ describe('Modal test', () => {
       zIndex: 100,
     };
     assert.deepEqual(div.prop('style'), expectedStyle);
+    assert.deepEqual(typeof div.prop('onClick'), 'function');
   });
 
-  it('should second div rendered with expected styles when pass requred props', () => {
+  it('should first div rendered with expected props when pass all props', () => {
+    const wrapper = shallow(
+      <Modal
+        isOpen={false}
+        onRequestClose={() => console.log('test')}
+        modal={{
+          backgroundColor: '#f5f5f5',
+          width: '199px',
+          height: '299px',
+          opacity: 0.8,
+          zIndex: 9999,
+        }}
+        overlay={{
+          background: 'rgba(1, 1, 1, 0.5)',
+          zIndex: 9998,
+        }}
+      >
+        test
+      </Modal>
+    );
+    const div = wrapper.children().at(0);
+    const expectedStyle = {
+      position: 'fixed',
+      width: '100%',
+      height: '100%',
+      top: 0,
+      left: 0,
+      background: 'rgba(1, 1, 1, 0.5)',
+      visibility: 'hidden',
+      opacity: 0,
+      zIndex: 9998,
+    };
+    assert.deepEqual(div.prop('style'), expectedStyle);
+    assert.deepEqual(typeof div.prop('onClick'), 'function');
+  });
+
+  it('should first div rendered with expected props when pass all props with isOepn true', () => {
+    const wrapper = shallow(
+      <Modal
+         isOpen={ true }
+         onRequestClose={() => console.log('test')}
+        modal={{
+          backgroundColor: '#f5f5f5',
+          width: '199px',
+          height: '299px',
+          opacity: 0.8,
+          zIndex: 9999,
+        }}
+        overlay={{
+          background: 'rgba(1, 1, 1, 0.5)',
+          zIndex: 9998,
+        }}
+        >
+        test
+      </Modal>
+    );
+    const div = wrapper.children().at(0);
+    const expectedStyle = {
+      position: 'fixed',
+      width: '100%',
+      height: '100%',
+      top: 0,
+      left: 0,
+      background: 'rgba(1, 1, 1, 0.5)',
+      visibility: 'visible',
+      opacity: 0,
+      zIndex: 9998,
+    };
+    assert.deepEqual(div.prop('style'), expectedStyle);
+    assert.deepEqual(typeof div.prop('onClick'), 'function');
+  });
+
+  it('should called onRequestClose callback when overlay clicked', () => {
+    const onRequestClose = sinon.spy();
+    const wrapper = mount(
+      <Modal
+        isOpen={ true }
+        onRequestClose={ onRequestClose }
+        modal={{
+          backgroundColor: '#f5f5f5',
+          width: '199px',
+          height: '299px',
+          opacity: 0.8,
+          zIndex: 9999,
+        }}
+        overlay={{
+          background: 'rgba(1, 1, 1, 0.5)',
+          zIndex: 9998,
+        }}
+        >
+        test
+      </Modal>
+    );
+    const div = wrapper.children().at(0);
+    div.simulate('click');
+    assert(onRequestClose.calledOnce);
+  });
+
+  it('should second div rendered with expected props when pass requred props', () => {
     const wrapper = mount(
       <Modal
         isOpen={false}
@@ -67,6 +167,16 @@ describe('Modal test', () => {
         test
       </Modal>
     );
+
+    wrapper.setState({
+      width: 100,
+      height: 200,
+      top: 10,
+      bottom: 210,
+      right: 105,
+      left: 5,
+    });
+    wrapper.update();
     const div = wrapper.children().at(1);
     const expectedStyle = {
       overflow: 'visible',
@@ -74,13 +184,259 @@ describe('Modal test', () => {
       position: 'fixed',
       top: '50%',
       left: '50%',
-      marginTop: '-0px', // FIXME: this.refs.wrapper.scrollWidth return 0 on test
-      marginLeft: '-0px', // FIXME: this.refs.wrapper.scrollWidth return 0 on test
+      marginTop: '-100px',
+      marginLeft: '-50px',
       width: '100px',
       height: '200px',
       zIndex: 101,
     };
     assert.deepEqual(div.prop('style'), expectedStyle);
+  });
+
+  it('should second div rendered with expected props when pass all props', () => {
+    const wrapper = mount(
+      <Modal
+        isOpen={false}
+        onRequestClose={() => console.log('test')}
+        modal={{
+          backgroundColor: '#f5f5f5',
+          width: '199px',
+          height: '299px',
+          opacity: 0.8,
+          zIndex: 9999,
+        }}
+        overlay={{
+          background: 'rgba(1, 1, 1, 0.5)',
+          zIndex: 9998,
+        }}
+      >
+        test
+      </Modal>
+    );
+    wrapper.setState({
+      width: 100,
+      height: 200,
+      top: 10,
+      bottom: 210,
+      right: 105,
+      left: 5,
+    });
+    wrapper.update();
+    const div = wrapper.children().at(1);
+    const expectedStyle = {
+      overflow: 'visible',
+      transform: 'scale3d(0, 0, 1)',
+      position: 'fixed',
+      top: '50%',
+      left: '50%',
+      marginTop: '-100px',
+      marginLeft: '-50px',
+      width: '199px',
+      height: '299px',
+      zIndex: 9999,
+    };
+    assert.deepEqual(div.prop('style'), expectedStyle);
+  });
+
+  it('should second div rendered with expected props when pass all props with isOepn true', done => {
+    const wrapper = mount(
+      <Modal
+        isOpen={ false }
+        onRequestClose={() => console.log('test')}
+        modal={{
+          backgroundColor: '#f5f5f5',
+          width: '199px',
+          height: '299px',
+          opacity: 0.8,
+          zIndex: 9999,
+        }}
+        overlay={{
+          background: 'rgba(1, 1, 1, 0.5)',
+          zIndex: 9998,
+        }}
+        >
+        test
+      </Modal>
+    );
+
+    wrapper.setState({
+      width: 100,
+      height: 200,
+      top: 100,
+      bottom: 100,
+      right: 50,
+      left: 50,
+      scale: 0,
+      opacity: 0,
+    });
+    wrapper.setProps({ isOpen: true });
+    wrapper.update();
+    setTimeout(() => {
+      const div = wrapper.children().at(1);
+      const expectedStyle = {
+        overflow: 'visible',
+        transform: 'scale3d(1, 1, 1)',
+        position: 'fixed',
+        top: '50%',
+        left: '50%',
+        marginTop: '-0px', // FIXME: this.refs.wrapper.clientWidth returns 0 
+        marginLeft: '-0px', // FIXME: this.refs.wrapper.clientWidth returns 0 
+        width: '199px',
+        height: '299px',
+        zIndex: 9999,
+      };
+      assert.deepEqual(div.prop('style'), expectedStyle);
+      done();
+    }, 1000);
+  });
+
+  it('should svg rendered with expected props when pass requred props', () => {
+    const wrapper = mount(
+      <Modal
+        isOpen={false}
+        modal={{
+          backgroundColor: '#f5f5f5',
+          width: '100px',
+          height: '200px',
+        }}
+      >
+        test
+      </Modal>
+    );
+    const expectedStyle = {
+      position: 'absolute',
+      top: '-5%',
+      left: '-5%',
+      transform: 'scale3d(0, 0, 1)',
+      opacity: 1,
+    };
+    const div = wrapper.children().at(1);
+    const svg = div.children().at(0);
+    assert.equal(svg.prop('width'), '110%');
+    assert.equal(svg.prop('height'), '110%');
+    assert.deepEqual(svg.prop('style'), expectedStyle);
+  });
+
+  it('should svg rendered with expected props when pass all props', () => {
+    const wrapper = mount(
+      <Modal
+        isOpen={false}
+        onRequestClose={() => console.log('test')}
+        modal={{
+          backgroundColor: '#f5f5f5',
+          width: '199px',
+          height: '299px',
+          opacity: 0.8,
+          zIndex: 9999,
+        }}
+        overlay={{
+          background: 'rgba(1, 1, 1, 0.5)',
+          zIndex: 9998,
+        }}
+      >
+        test
+      </Modal>
+    );
+    const expectedStyle = {
+      position: 'absolute',
+      top: '-5%',
+      left: '-5%',
+      transform: `scale3d(0, 0, 1)`,
+      opacity: 0.8,
+    };
+    const div = wrapper.children().at(1);
+    const svg = div.children().at(0);
+    assert.equal(svg.prop('width'), '110%');
+    assert.equal(svg.prop('height'), '110%');
+    assert.deepEqual(svg.prop('style'), expectedStyle);
+  });
+
+  it('should svg path rendered with expected props when pass all props', () => {
+    const wrapper = mount(
+      <Modal
+        isOpen={false}
+        onRequestClose={() => console.log('test')}
+        modal={{
+          backgroundColor: '#f5f5f5',
+          width: '199px',
+          height: '299px',
+          opacity: 0.8,
+          zIndex: 9999,
+        }}
+        overlay={{
+          background: 'rgba(1, 1, 1, 0.5)',
+          zIndex: 9998,
+        }}
+        >
+        test
+      </Modal>
+    );
+    wrapper.setState({
+      width: 100,
+      height: 200,
+      top: 10,
+      bottom: 210,
+      right: 105,
+      left: 5,
+    });
+    wrapper.update();
+    const div = wrapper.children().at(1);
+    const path = div.children().at(0).children().at(0);
+    const expectedPath = `M 5 10
+                   Q 55 10 105 10
+                   Q 105 110 105 210
+                   Q 55 210 5 210
+                   Q 5 110 5 10`;
+    assert.equal(path.prop('fill'), '#f5f5f5');
+    assert.equal(path.prop('d'), expectedPath);
+  });
+
+  it('should svg rendered with expected props when pass all props with isOepn true', done => {
+    const wrapper = mount(
+      <Modal
+        isOpen={ false }
+        onRequestClose={() => console.log('test')}
+        modal={{
+          backgroundColor: '#f5f5f5',
+          width: '199px',
+          height: '299px',
+          opacity: 0.8,
+          zIndex: 9999,
+        }}
+        overlay={{
+          background: 'rgba(1, 1, 1, 0.5)',
+          zIndex: 9998,
+        }}
+        >
+        test
+      </Modal>
+    );
+    wrapper.setState({
+      width: 100,
+      height: 200,
+      top: 100,
+      bottom: 100,
+      right: 50,
+      left: 50,
+      scale: 0,
+      opacity: 0,
+    });
+    wrapper.setProps({ isOpen: true });
+    wrapper.update();
+    setTimeout(() => {
+      const div = wrapper.children().at(1);
+      const svg = div.children().at(0);
+      const expectedStyle = {
+        position: 'absolute',
+        top: '-5%',
+        left: '-5%',
+        transform: 'scale3d(1, 1, 1)',
+        opacity: 0.8,
+      };
+      assert.deepEqual(svg.prop('style'), expectedStyle);
+      done();
+    }, 1000);
+
   });
 
   it('should third div rendered with expected styles when pass requred props', () => {
@@ -96,6 +452,15 @@ describe('Modal test', () => {
         test
       </Modal>
     );
+    wrapper.setState({
+      width: 100,
+      height: 200,
+      top: 10,
+      bottom: 210,
+      right: 105,
+      left: 5,
+    });
+    wrapper.update();
     const div = wrapper.children().at(2);
     const expectedStyle = {
       opacity: 0,
@@ -104,13 +469,115 @@ describe('Modal test', () => {
       position: 'fixed',
       top: '50%',
       left: '50%',
-      marginTop: '-0px', // FIXME: this.refs.wrapper.scrollWidth return 0 on test
-      marginLeft: '-0px', // FIXME: this.refs.wrapper.scrollWidth return 0 on test
+      marginTop: '-100px',
+      marginLeft: '-50px',
       width: '100px',
       height: '200px',
       zIndex: 101,
       visibility: 'hidden',
     };
     assert.deepEqual(div.prop('style'), expectedStyle);
+  });
+
+
+  it('should third div rendered with expected props when pass all props', () => {
+    const wrapper = mount(
+      <Modal
+        isOpen={false}
+        onRequestClose={() => console.log('test')}
+        modal={{
+          backgroundColor: '#f5f5f5',
+          width: '199px',
+          height: '299px',
+          opacity: 0.8,
+          zIndex: 9999,
+        }}
+        overlay={{
+          background: 'rgba(1, 1, 1, 0.5)',
+          zIndex: 9998,
+        }}
+      >
+        test
+      </Modal>
+    );
+    wrapper.setState({
+      width: '100',
+      height: '200',
+      top: '10',
+      bottom: '210',
+      right: '105',
+      left: '5',
+    });
+    wrapper.update();
+    const div = wrapper.children().at(2);
+    const expectedStyle = {
+      opacity: 0,
+      overflow: 'scroll',
+      transform: 'scale3d(0, 0, 1)',
+      position: 'fixed',
+      top: '50%',
+      left: '50%',
+      marginTop: '-100px',
+      marginLeft: '-50px',
+      width: '199px',
+      height: '299px',
+      zIndex: 9999,
+      visibility: 'hidden',
+    };
+    assert.deepEqual(div.prop('style'), expectedStyle);
+  });
+
+  it('should third div rendered with expected props when pass all props with isOepn true', done => {
+    const wrapper = mount(
+      <Modal
+        isOpen={ false }
+        onRequestClose={() => console.log('test')}
+        modal={{
+          backgroundColor: '#f5f5f5',
+          width: '199px',
+          height: '299px',
+          opacity: 0.8,
+          zIndex: 9999,
+        }}
+        overlay={{
+          background: 'rgba(1, 1, 1, 0.5)',
+          zIndex: 9998,
+        }}
+      >
+        test
+      </Modal>
+    );
+
+    wrapper.setState({
+      width: 100,
+      height: 200,
+      top: 100,
+      bottom: 100,
+      right: 50,
+      left: 50,
+      scale: 0,
+      opacity: 0,
+    });
+    wrapper.setProps({ isOpen: true });
+    wrapper.update();
+    setTimeout(() => {
+      const div = wrapper.children().at(2);
+      const expectedStyle = {
+        opacity: 1,
+        overflow: 'scroll',
+        transform: 'scale3d(1, 1, 1)',
+        position: 'fixed',
+        top: '50%',
+        left: '50%',
+        marginTop: '-0px', // FIXME: this.refs.wrapper.clientWidth returns 0
+        marginLeft: '-0px', // FIXME: this.refs.wrapper.clientWidth returns 0
+        width: '199px',
+        height: '299px',
+        zIndex: 9999,
+        visibility: 'visible',
+      };
+      assert.deepEqual(div.prop('style'), expectedStyle);
+      done();
+    }, 1000);
   });
 });
