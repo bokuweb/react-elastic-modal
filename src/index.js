@@ -8,17 +8,16 @@ const opacityFactor = 0.08;
 const scaleFactor = 0.08;
 
 const FPS = 1000 / 60;
+
 const requestAnimationFrame = window.requestAnimationFrame
         || window.webkitRequestAnimationFrame
         || window.mozRequestAnimationFrame
         || window.setTimeout;
+
 const cancelAnimationFrame = window.cancelAnimationFrame
         || window.webkitRequestAnimationFrame
         || window.mozRequestAnimationFrame
         || window.clearTimeout;
-
-window.requestAnimationFrame = requestAnimationFrame;
-window.cancelAnimationFrame = cancelAnimationFrame;
 
 export default class ElasticModal extends Component {
   static propTypes = {
