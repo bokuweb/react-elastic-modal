@@ -7,6 +7,19 @@ const svgMarginRatio = 0.05;
 const opacityFactor = 0.08;
 const scaleFactor = 0.08;
 
+const FPS = 1000 / 60;
+const requestAnimationFrame = window.requestAnimationFrame
+        || window.webkitRequestAnimationFrame
+        || window.mozRequestAnimationFrame
+        || window.setTimeout;
+const cancelAnimationFrame = window.cancelAnimationFrame
+        || window.webkitRequestAnimationFrame
+        || window.mozRequestAnimationFrame
+        || window.clearTimeout;
+
+window.requestAnimationFrame = requestAnimationFrame;
+window.cancelAnimationFrame = cancelAnimationFrame;
+
 export default class ElasticModal extends Component {
   static propTypes = {
     isOpen: PropTypes.bool.isRequired,
@@ -68,7 +81,7 @@ export default class ElasticModal extends Component {
   }
 
   setDefaultState() {
-    const width = this.refs.wrapper.scrollWidth;
+    const width = this.refs.wrapper.clientWidth;
     const height = this.refs.wrapper.clientHeight;
     this.setState({
       height,
@@ -113,27 +126,28 @@ export default class ElasticModal extends Component {
 
   open() {
     const { width, height } = this.state;
+    let { scale, opacity } = this.state;
     const top = this.topEasing.calc(height * svgMarginRatio, this.state.top);
     const bottom = this.bottomEasing.calc(height * (1 + svgMarginRatio), this.state.bottom);
     const right = this.rightEasing.calc(width * (1 + svgMarginRatio), this.state.right);
     const left = this.leftEasing.calc(width * svgMarginRatio, this.state.left);
-    this.openAnimationId = requestAnimationFrame(::this.open);
-    const scale = this.state.scale + scaleFactor >= 1
-            ? 1
-            : this.state.scale + scaleFactor;
-    const opacity = this.state.opacity + opacityFactor >= 1
-            ? 1
-            : this.state.opacity + opacityFactor;
+    this.openAnimationId = requestAnimationFrame(::this.open, FPS);
+    scale = scale + scaleFactor >= 1 ? 1 : scale + scaleFactor;
+    opacity = opacity + opacityFactor >= 1 ? 1 : opacity + opacityFactor;
+    if (this.isAnimationStop()) {
+      cancelAnimationFrame(this.openAnimationId);
+      scale = 1;
+      opacity = 1;
+    }
     this.setState({ top, bottom, right, left, scale, opacity });
-    if (this.isAnimationStop()) cancelAnimationFrame(this.openAnimationId);
   }
 
   close() {
-    this.closeAnimationId = requestAnimationFrame(::this.close);
+    this.closeAnimationId = requestAnimationFrame(::this.close, FPS);
     const scale = this.state.scale - scaleFactor < 0 ? 0 : this.state.scale - scaleFactor;
     const opacity = this.state.scale - opacityFactor < 0 ? 0 : this.state.scale - opacityFactor;
     this.setState({ scale, opacity });
-    if (scale === 0) cancelAnimationFrame(this.closeAnimationId);
+    if (scale === 0 && opacity === 0) cancelAnimationFrame(this.closeAnimationId);
   }
 
   renderPath() {
