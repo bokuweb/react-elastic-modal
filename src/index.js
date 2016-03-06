@@ -151,8 +151,8 @@ export default class ElasticModal extends Component {
         height={`${100 + svgMarginRatio * 200}%`}
         style={{
           position: 'absolute',
-          top: '-5%',
-          left: '-5%',
+          top: `-${100 * svgMarginRatio}%`,
+          left: `-${100 * svgMarginRatio}%`,
           transform: `scale3d(${this.state.scale}, ${this.state.scale}, 1)`,
           opacity: this.props.modal.opacity || 1,
         }}
