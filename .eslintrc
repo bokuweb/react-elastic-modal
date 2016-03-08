@@ -1,4 +1,14 @@
 {
   "extends": "airbnb",
-  "parser": "babel-eslint"
+  "parser": "babel-eslint",
+  "plugins": [
+    "mocha"
+  ],
+  "env": {
+    mocha: true
+  },
+  "rules": {
+    "react/jsx-no-bind": [0],
+    "max-len": [2,120]
+  }
 }

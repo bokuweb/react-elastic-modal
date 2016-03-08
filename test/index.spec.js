@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow, mount, render } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import assert from 'power-assert';
 import sinon from 'sinon';
 import Modal from '../src/index';
@@ -95,8 +95,8 @@ describe('Modal test', () => {
   it('should first div rendered with expected props when pass all props with isOepn true', () => {
     const wrapper = shallow(
       <Modal
-         isOpen={ true }
-         onRequestClose={() => console.log('test')}
+        isOpen
+        onRequestClose={() => console.log('test')}
         modal={{
           backgroundColor: '#f5f5f5',
           width: '199px',
@@ -108,7 +108,7 @@ describe('Modal test', () => {
           background: 'rgba(1, 1, 1, 0.5)',
           zIndex: 9998,
         }}
-        >
+      >
         test
       </Modal>
     );
@@ -132,7 +132,7 @@ describe('Modal test', () => {
     const onRequestClose = sinon.spy();
     const wrapper = mount(
       <Modal
-        isOpen={ true }
+        isOpen
         onRequestClose={ onRequestClose }
         modal={{
           backgroundColor: '#f5f5f5',
@@ -145,7 +145,7 @@ describe('Modal test', () => {
           background: 'rgba(1, 1, 1, 0.5)',
           zIndex: 9998,
         }}
-        >
+      >
         test
       </Modal>
     );
@@ -254,7 +254,7 @@ describe('Modal test', () => {
           background: 'rgba(1, 1, 1, 0.5)',
           zIndex: 9998,
         }}
-        >
+      >
         test
       </Modal>
     );
@@ -279,8 +279,8 @@ describe('Modal test', () => {
         position: 'fixed',
         top: '50%',
         left: '50%',
-        marginTop: '-0px', // FIXME: this.refs.wrapper.clientWidth returns 0 
-        marginLeft: '-0px', // FIXME: this.refs.wrapper.clientWidth returns 0 
+        marginTop: '-0px', // FIXME: this.refs.wrapper.clientWidth returns 0
+        marginLeft: '-0px', // FIXME: this.refs.wrapper.clientWidth returns 0
         width: '199px',
         height: '299px',
         zIndex: 9999,
@@ -341,7 +341,7 @@ describe('Modal test', () => {
       position: 'absolute',
       top: '-5%',
       left: '-5%',
-      transform: `scale3d(0, 0, 1)`,
+      transform: 'scale3d(0, 0, 1)',
       opacity: 0.8,
     };
     const div = wrapper.children().at(1);
@@ -367,7 +367,7 @@ describe('Modal test', () => {
           background: 'rgba(1, 1, 1, 0.5)',
           zIndex: 9998,
         }}
-        >
+      >
         test
       </Modal>
     );
@@ -407,7 +407,7 @@ describe('Modal test', () => {
           background: 'rgba(1, 1, 1, 0.5)',
           zIndex: 9998,
         }}
-        >
+      >
         test
       </Modal>
     );
@@ -436,18 +436,17 @@ describe('Modal test', () => {
       assert.deepEqual(svg.prop('style'), expectedStyle);
       done();
     }, 1000);
-
   });
 
   it('should third div rendered with expected styles when pass requred props', () => {
     const wrapper = mount(
       <Modal
-         isOpen={false}
-         modal={{
-           backgroundColor: '#f5f5f5',
-           width: '100px',
-           height: '200px',
-         }}
+        isOpen={false}
+        modal={{
+          backgroundColor: '#f5f5f5',
+          width: '100px',
+          height: '200px',
+        }}
       >
         test
       </Modal>
