@@ -64,7 +64,15 @@ export default class ElasticModal extends Component {
 
   componentDidMount() {
     this.setMountState();
-    this.setDefaultState();
+    this.setDefaultState(() => {
+      if (!this.props.isOpen) {
+        return;
+      }
+
+      this.resize(() => {
+        this.open();
+      });
+    });
   }
 
   componentWillReceiveProps(next) {
@@ -79,7 +87,7 @@ export default class ElasticModal extends Component {
     }
   }
 
-  setDefaultState() {
+  setDefaultState(callback) {
     const width = this.refs.wrapper.clientWidth;
     const height = this.refs.wrapper.clientHeight;
     this.setState({
@@ -89,14 +97,14 @@ export default class ElasticModal extends Component {
       bottom: height * (0.5 + svgMarginRatio),
       right: width * (0.5 + svgMarginRatio),
       left: width * (0.5 + svgMarginRatio),
-    });
+    }, callback);
   }
 
   setMountState() {
     this.setState({ isMount: true });
   }
 
-  resize() {
+  resize(callback) {
     const { isOpen } = this.props;
     const width = this.refs.wrapper.clientWidth;
     const height = this.refs.wrapper.clientHeight;
@@ -107,7 +115,7 @@ export default class ElasticModal extends Component {
       bottom: isOpen ? height * (1 + svgMarginRatio) : height * (0.5 + svgMarginRatio),
       right: isOpen ? width * (1 + svgMarginRatio) : width * (0.5 + svgMarginRatio),
       left: isOpen ? width * svgMarginRatio : width * (0.5 + svgMarginRatio),
-    });
+    }, callback);
   }
 
   conponentWillUnmount() {
