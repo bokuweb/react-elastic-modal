@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
 import Modal from '../../src';
 
+const key = 'react-elastic-modal-example';
+
 export default class Example extends Component {
   constructor(props) {
     super(props);
-    this.state = { isOpen: false };
+    this.state = (JSON.parse(localStorage.getItem(key)) || { isOpen: false });
+  }
+
+  componentDidUpdate() {
+    localStorage.setItem(key, JSON.stringify(this.state));
   }
 
   render() {

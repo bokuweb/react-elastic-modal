@@ -579,4 +579,37 @@ describe('Modal test', () => {
       done();
     }, 1000);
   });
+
+  it('#19 should be open automatically if specify `<ElasticModal isOpen={true} />`', done => {
+    sinon.spy(Modal.prototype, 'componentDidMount');
+    sinon.spy(Modal.prototype, 'componentWillReceiveProps');
+    sinon.spy(Modal.prototype, 'open');
+
+    const wrapper = mount(
+      <Modal
+        isOpen
+        modal={{
+          backgroundColor: '#f5f5f5',
+          width: '199px',
+          height: '299px',
+          opacity: 0.8,
+          zIndex: 9999,
+        }}
+        overlay={{
+          background: 'rgba(1, 1, 1, 0.5)',
+          zIndex: 9998,
+        }}
+      >
+        test
+      </Modal>
+    );
+
+    setTimeout(() => {
+      assert(Modal.prototype.componentDidMount.calledOnce);
+      assert(Modal.prototype.open.calledOnce);
+      assert(wrapper.instance().isAnimationStop());
+
+      done();
+    }, 0);
+  });
 });
