@@ -95,6 +95,10 @@ overlay: PropTypes.shape({
 
 ## ChangeLog
 
+### v0.1.2
+
+- Bug FIx(thanks @59naga)
+
 ### v0.1.1
 
 - Add Unit Test
