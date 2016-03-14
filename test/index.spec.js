@@ -5,6 +5,17 @@ import sinon from 'sinon';
 import Modal from '../src/index';
 
 describe('Modal test', () => {
+  let div;
+  beforeEach(() => {
+    div = document.createElement('div');
+    document.body.appendChild(div);
+  });
+
+  afterEach(() => {
+    document.body.innerHTML = '';
+  });
+
+
   it('should It rendered with expected element', () => {
     const wrapper = shallow(
       <Modal
@@ -256,7 +267,8 @@ describe('Modal test', () => {
         }}
       >
         test
-      </Modal>
+      </Modal>,
+      { attachTo: div }
     );
 
     wrapper.setState({
@@ -279,13 +291,14 @@ describe('Modal test', () => {
         position: 'fixed',
         top: '50%',
         left: '50%',
-        marginTop: '-0px', // FIXME: this.refs.wrapper.clientWidth returns 0
-        marginLeft: '-0px', // FIXME: this.refs.wrapper.clientWidth returns 0
+        marginTop: '-149.5px',
+        marginLeft: '-99.5px',
         width: '199px',
         height: '299px',
         zIndex: 9999,
       };
       assert.deepEqual(div.prop('style'), expectedStyle);
+      wrapper.detach();
       done();
     }, 1000);
   });
@@ -545,6 +558,7 @@ describe('Modal test', () => {
       >
         test
       </Modal>
+      ,{ attachTo: div }
     );
 
     wrapper.setState({
@@ -568,14 +582,15 @@ describe('Modal test', () => {
         position: 'fixed',
         top: '50%',
         left: '50%',
-        marginTop: '-0px', // FIXME: this.refs.wrapper.clientWidth returns 0
-        marginLeft: '-0px', // FIXME: this.refs.wrapper.clientWidth returns 0
+        marginTop: '-149.5px',
+        marginLeft: '-99.5px',
         width: '199px',
         height: '299px',
         zIndex: 9999,
         visibility: 'visible',
       };
       assert.deepEqual(div.prop('style'), expectedStyle);
+      wrapper.detach();
       done();
     }, 1000);
   });
