@@ -45,7 +45,7 @@ http://bokuweb.github.io/react-elastic-modal/
 
 ## Props
 
-### `isOepn`: PropTypes.bool.isRequired
+### `isOpen`: PropTypes.bool.isRequired
 
 If true, the modal is open. If false, the modal is closed.
 
