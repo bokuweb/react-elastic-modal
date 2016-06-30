@@ -65,13 +65,8 @@ export default class ElasticModal extends Component {
   componentDidMount() {
     this.setMountState();
     this.setDefaultState(() => {
-      if (!this.props.isOpen) {
-        return;
-      }
-
-      this.resize(() => {
-        this.open();
-      });
+      if (!this.props.isOpen) return;
+      this.resize(() => this.open());
     });
   }
 
@@ -107,7 +102,7 @@ export default class ElasticModal extends Component {
   resize(callback) {
     const { isOpen } = this.props;
     if (!this.refs.wrapper) {
-      return
+      return;
     }
     const width = this.refs.wrapper.clientWidth;
     const height = this.refs.wrapper.clientHeight;
@@ -118,7 +113,7 @@ export default class ElasticModal extends Component {
       bottom: isOpen ? height * (1 + svgMarginRatio) : height * (0.5 + svgMarginRatio),
       right: isOpen ? width * (1 + svgMarginRatio) : width * (0.5 + svgMarginRatio),
       left: isOpen ? width * svgMarginRatio : width * (0.5 + svgMarginRatio),
-    });
+    }, callback);
   }
 
   conponentWillUnmount() {

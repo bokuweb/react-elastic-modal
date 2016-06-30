@@ -617,6 +617,7 @@ describe('Modal test', () => {
       >
         test
       </Modal>
+      ,{ attachTo: div }
     );
 
     setTimeout(() => {
