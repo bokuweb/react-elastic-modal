@@ -59,7 +59,8 @@ export default class ElasticModal extends Component {
       opacity: 0,
     };
     this.resize = ::this.resize;
-    window.addEventListener('resize', this.resize);
+    this.onWindowResize = ::this.onWindowResize;
+    window.addEventListener('resize', this.onWindowResize);
   }
 
   componentDidMount() {
@@ -127,6 +128,10 @@ export default class ElasticModal extends Component {
       this.bottomEasing.isStop() &&
       this.leftEasing.isStop()
     );
+  }
+
+  onWindowResize() {
+    this.resize();
   }
 
   open() {
