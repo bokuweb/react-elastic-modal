@@ -229,7 +229,6 @@ export default class ElasticModal extends Component {
         <div
           style={{
             opacity,
-            overflow: 'scroll',
             ...commonStyles,
             visibility: isOpen ? 'visible' : 'hidden',
           }}
