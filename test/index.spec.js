@@ -476,7 +476,6 @@ describe('Modal test', () => {
     const div = wrapper.children().at(2);
     const expectedStyle = {
       opacity: 0,
-      overflow: 'scroll',
       transform: 'scale3d(0, 0, 1)',
       position: 'fixed',
       top: '50%',
@@ -524,7 +523,6 @@ describe('Modal test', () => {
     const div = wrapper.children().at(2);
     const expectedStyle = {
       opacity: 0,
-      overflow: 'scroll',
       transform: 'scale3d(0, 0, 1)',
       position: 'fixed',
       top: '50%',
@@ -577,7 +575,6 @@ describe('Modal test', () => {
       const div = wrapper.children().at(2);
       const expectedStyle = {
         opacity: 1,
-        overflow: 'scroll',
         transform: 'scale3d(1, 1, 1)',
         position: 'fixed',
         top: '50%',
